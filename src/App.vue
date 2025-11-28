@@ -304,18 +304,20 @@ export default {
     },
 
     handleSimpanStok(formData) {
+      const dataBaru = JSON.parse(JSON.stringify(formData))
       if (this.modeModal === 'tambah') {
-        const exists = this.state.stok.find((b) => b.kode === formData.kode)
+        const exists = this.state.stok.find((b) => b.kode === dataBaru.kode)
         if (exists) {
           alert('Kode buku sudah ada!')
           return
         }
-        this.state.stok.push(formData)
+        this.state.stok = [...this.state.stok, dataBaru]
         alert('Data stok berhasil ditambahkan!')
       } else {
-        const index = this.state.stok.findIndex((b) => b.kode === formData.kode)
+        const index = this.state.stok.findIndex((b) => b.kode === dataBaru.kode)
         if (index !== -1) {
-          this.state.stok[index] = formData
+          this.state.stok[index] = dataBaru
+          this.state.stok = [...this.state.stok]
           alert('Data stok berhasil diperbarui!')
         }
       }
@@ -357,8 +359,4 @@ export default {
 
 <style>
 @import './assets/css/style.css';
-@import './assets/css/header.css';
-@import './assets/css/stok.css';
-@import './assets/css/tracking.css';
-@import './assets/css/landing.css';
 </style>

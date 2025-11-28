@@ -24,7 +24,7 @@
           <label>Ekspedisi</label>
           <select v-model="localForm.ekspedisi" required class="form-control">
             <option value="" disabled>Pilih Ekspedisi</option>
-            <option v-for="item in pengirimanList" :value="item.nama">
+            <option v-for="item in pengirimanList" :value="item.nama" :key="item.kode">
               {{ item.nama }}
             </option>
           </select>
@@ -34,7 +34,7 @@
           <label>Paket Bahan Ajar</label>
           <select v-model="localForm.paketKode" required class="form-control">
             <option value="" disabled>Pilih Paket</option>
-            <option v-for="item in paketList" :value="item.kode">
+            <option v-for="item in paketList" :value="item.kode" :key="item.kode">
               {{ item.kode }} - {{ item.nama }}
             </option>
           </select>

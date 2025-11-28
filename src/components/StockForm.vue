@@ -24,14 +24,14 @@
         <div class="form-group">
           <label>Kategori</label>
           <select v-model="localForm.kategori" required class="form-control">
-            <option v-for="kat in kategoriList" :value="kat">{{ kat }}</option>
+            <option v-for="kat in kategoriList" :value="kat" :key="kat">{{ kat }}</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>UPBJJ</label>
           <select v-model="localForm.upbjj" required class="form-control">
-            <option v-for="lok in upbjjList" :value="lok">{{ lok }}</option>
+            <option v-for="lok in upbjjList" :value="lok" :key="lok">{{ lok }}</option>
           </select>
         </div>
 
@@ -81,6 +81,7 @@ export default {
 
   methods: {
     simpan() {
+      console.log('Mengirim data:', this.localForm)
       this.$emit('submit-data', this.localForm)
     },
   },
