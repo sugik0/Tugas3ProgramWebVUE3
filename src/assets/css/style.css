@@ -18,7 +18,7 @@ main {
   text-align: center;
   min-height: 63vh;
   padding: 2.1rem;
-  background-image: url('./assets/img/banner-landing.png');
+  background-image: url('/assets/img/banner-landing.png');
   background-size: cover;
   background-position: center;
   display: grid;
