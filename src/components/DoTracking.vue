@@ -1,58 +1,63 @@
 <template>
   <div>
-    <section class="banner">
-      <div class="banner-content">
-        <h1>Tracking Pengiriman</h1>
-        <p class="subtitle">Lacak status pengiriman Delivery Order (DO) Anda.</p>
+    <app-banner
+      title="Tracking Pengiriman"
+      subtitle="Lacak status pengiriman Delivery Order (DO) Anda."
+    >
+      <form class="tracking-form" @submit.prevent="cariDO">
+        <input type="text" v-model="nomorDoCari" placeholder="Contoh: DO2025-0001" required />
+        <button type="submit" class="search-btn">Cari</button>
+      </form>
 
-        <form class="tracking-form" @submit.prevent="cariDO">
-          <input type="text" v-model="nomorDoCari" placeholder="Contoh: DO2025-0001" required />
-          <button type="submit" class="search-btn">Cari</button>
-        </form>
+      <button class="open-modal-btn" type="button" @click="$emit('tambah-do')">
+        Tambah DO Baru
+      </button>
 
-        <button class="open-modal-btn" type="button" @click="$emit('tambah-do')">
-          Tambah DO Baru
-        </button>
-      </div>
+      <template #side>
+        <section class="card" v-if="hasilPencarian" style="margin-top: 20px">
+          <h2>Hasil Pelacakan</h2>
+          <div class="result-summary">
+            <div class="summary-item">
+              <label>Nomor DO</label>
+              <span class="status-badge">{{ hasilPencarian.nomorDO }}</span>
+            </div>
+            <div class="summary-item">
+              <label>Status</label>
+              <span class="status-badge">{{ hasilPencarian.status }}</span>
+            </div>
+            <div class="summary-item">
+              <label>Penerima</label>
+              <span>{{ hasilPencarian.nama }}</span>
+            </div>
+            <div class="summary-item">
+              <label>Ekspedisi</label>
+              <span>{{ hasilPencarian.ekspedisi }}</span>
+            </div>
+          </div>
+          <h3 style="padding-left: 1.5rem">Detail Perjalanan</h3>
+          <ul class="journey-list">
+            <li v-for="(item, index) in hasilPencarian.perjalanan" :key="index">
+              <span class="time">{{ item.waktu }}</span>
+              <span class="detail">{{ item.keterangan }}</span>
+            </li>
+          </ul>
+        </section>
 
-      <section class="card" v-if="hasilPencarian" style="margin-top: 20px">
-        <h2>Hasil Pelacakan</h2>
-        <div class="result-summary">
-          <div class="summary-item">
-            <label>Nomor DO</label>
-            <span class="status-badge">{{ hasilPencarian.nomorDO }}</span>
-          </div>
-          <div class="summary-item">
-            <label>Status</label>
-            <span class="status-badge">{{ hasilPencarian.status }}</span>
-          </div>
-          <div class="summary-item">
-            <label>Penerima</label>
-            <span>{{ hasilPencarian.nama }}</span>
-          </div>
-          <div class="summary-item">
-            <label>Ekspedisi</label>
-            <span>{{ hasilPencarian.ekspedisi }}</span>
-          </div>
-        </div>
-        <h3 style="padding-left: 1.5rem">Detail Perjalanan</h3>
-        <ul class="journey-list">
-          <li v-for="(item, index) in hasilPencarian.perjalanan" :key="index">
-            <span class="time">{{ item.waktu }}</span>
-            <span class="detail">{{ item.keterangan }}</span>
-          </li>
-        </ul>
-      </section>
-
-      <section class="card" v-if="pencarianGagal">
-        <p style="color: red; text-align: center">Nomor DO tidak ditemukan.</p>
-      </section>
-    </section>
+        <section class="card" v-if="pencarianGagal">
+          <p style="color: red; text-align: center">Nomor DO tidak ditemukan.</p>
+        </section>
+      </template>
+    </app-banner>
   </div>
 </template>
 <script>
+import AppBanner from './AppBanner.vue'
+
 export default {
   name: 'DoTracking',
+  components: {
+    AppBanner,
+  },
   props: ['trackingData', 'pengirimanList', 'paketList'],
   emits: ['tambah-do'],
   data() {

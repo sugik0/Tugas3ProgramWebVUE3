@@ -11,36 +11,6 @@ main {
   padding-top: 80px;
 }
 
-.banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 63vh;
-  padding: 2.1rem;
-  background-image: url('/assets/img/banner-landing.png');
-  background-size: cover;
-  background-position: center;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 2.5rem;
-  position: relative;
-  z-index: 0;
-}
-
-.banner h1 {
-  font-size: 3.5rem;
-  color: #004a99;
-  margin-bottom: 0.5rem;
-}
-
-.banner p {
-  font-size: 1.3rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
 .modal {
   display: none;
   position: fixed;

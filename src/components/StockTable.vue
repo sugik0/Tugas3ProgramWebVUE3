@@ -1,93 +1,98 @@
 <template>
   <div>
-    <section class="banner">
-      <div class="banner-content">
-        <h1>Informasi Bahan Ajar</h1>
-        <p class="subtitle">Kelola dan lihat ketersediaan stok bahan ajar di berbagai lokasi.</p>
+    <app-banner
+      title="Informasi Bahan Ajar"
+      subtitle="Kelola dan lihat ketersediaan stok bahan ajar di berbagai lokasi."
+    >
+      <button class="open-modal-btn" @click="requestTambah">Tambah Data Buku Baru</button>
 
-        <button class="open-modal-btn" @click="requestTambah">Tambah Data Buku Baru</button>
-
-        <div class="filter-container">
-          <h4>Filter dan Urutkan</h4>
-          <div class="filter-controls">
-            <div>
-              <label>Lokasi (UT-Daerah):</label>
-              <select v-model="filterLokasi">
-                <option value="">Semua Lokasi</option>
-                <option v-for="lok in upbjjList" :value="lok" :key="lok">{{ lok }}</option>
-              </select>
-            </div>
-            <div v-if="filterLokasi">
-              <label>Kategori:</label>
-              <select v-model="filterKategori">
-                <option value="">Semua Kategori</option>
-                <option v-for="kat in kategoriList" :value="kat" :key="kat">{{ kat }}</option>
-              </select>
-            </div>
-            <div class="checkbox-group" v-if="filterLokasi">
-              <label>
-                <input type="checkbox" v-model="filterHanyaMenipis" />
-                Hanya stok menipis
-              </label>
-            </div>
-            <div>
-              <label>Urutkan:</label>
-              <select v-model="urutkanBerdasarkan">
-                <option value="judul">Judul (A-Z)</option>
-                <option value="harga">Harga</option>
-                <option value="stok">Stok</option>
-              </select>
-            </div>
-            <div>
-              <button @click="resetFilter">Reset Filter</button>
-            </div>
+      <div class="filter-container">
+        <h4>Filter dan Urutkan</h4>
+        <div class="filter-controls">
+          <div>
+            <label>Lokasi (UT-Daerah):</label>
+            <select v-model="filterLokasi">
+              <option value="">Semua Lokasi</option>
+              <option v-for="lok in upbjjList" :value="lok" :key="lok">{{ lok }}</option>
+            </select>
+          </div>
+          <div v-if="filterLokasi">
+            <label>Kategori:</label>
+            <select v-model="filterKategori">
+              <option value="">Semua Kategori</option>
+              <option v-for="kat in kategoriList" :value="kat" :key="kat">{{ kat }}</option>
+            </select>
+          </div>
+          <div class="checkbox-group" v-if="filterLokasi">
+            <label>
+              <input type="checkbox" v-model="filterHanyaMenipis" />
+              Hanya stok menipis
+            </label>
+          </div>
+          <div>
+            <label>Urutkan:</label>
+            <select v-model="urutkanBerdasarkan">
+              <option value="judul">Judul (A-Z)</option>
+              <option value="harga">Harga</option>
+              <option value="stok">Stok</option>
+            </select>
+          </div>
+          <div>
+            <button @click="resetFilter">Reset Filter</button>
           </div>
         </div>
       </div>
 
-      <div class="stok-header-controls">
-        <h2>Daftar Stok Saat Ini</h2>
-        <section class="card">
-          <div class="stok-grid">
-            <article class="book-card" v-for="buku in stokTampil" :key="buku.kode">
-              <img :src="buku.cover" class="book-card-image" alt="Cover" />
-              <div class="book-card-content">
-                <h3 class="book-card-title">{{ buku.judul }}</h3>
+      <template #side>
+        <div class="stok-header-controls">
+          <h2>Daftar Stok Saat Ini</h2>
+          <section class="card">
+            <div class="stok-grid">
+              <article class="book-card" v-for="buku in stokTampil" :key="buku.kode">
+                <img :src="buku.cover" class="book-card-image" alt="Cover" />
+                <div class="book-card-content">
+                  <h3 class="book-card-title">{{ buku.judul }}</h3>
 
-                <div class="book-card-details">
-                  <span>Kode: {{ buku.kode }}</span>
-                  <span>Kategori: {{ buku.kategori }}</span>
-                  <span>Lokasi: {{ buku.upbjj }}</span>
-                </div>
+                  <div class="book-card-details">
+                    <span>Kode: {{ buku.kode }}</span>
+                    <span>Kategori: {{ buku.kategori }}</span>
+                    <span>Lokasi: {{ buku.upbjj }}</span>
+                  </div>
 
-                <div class="book-card-stock" :class="getStatusClass(buku)">
-                  Stok: {{ buku.qty }}
-                  <span v-if="buku.qty === 0">(Kosong)</span>
-                  <span v-else-if="buku.qty < buku.safety">(Menipis)</span>
-                  <span v-else>(Aman)</span>
-                </div>
+                  <div class="book-card-stock" :class="getStatusClass(buku)">
+                    Stok: {{ buku.qty }}
+                    <span v-if="buku.qty === 0">(Kosong)</span>
+                    <span v-else-if="buku.qty &lt; buku.safety">(Menipis)</span>
+                    <span v-else>(Aman)</span>
+                  </div>
 
-                <div class="book-card-price">
-                  {{ formatRupiah(buku.harga) }}
-                </div>
+                  <div class="book-card-price">
+                    {{ formatRupiah(buku.harga) }}
+                  </div>
 
-                <div class="card-actions">
-                  <button @click="requestEdit(buku)">Edit</button>
-                  <button @click="hapusBuku(buku.kode)">Hapus</button>
+                  <div class="card-actions">
+                    <button @click="requestEdit(buku)">Edit</button>
+                    <button @click="hapusBuku(buku.kode)">Hapus</button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
-        </section>
-      </div>
-    </section>
+              </article>
+            </div>
+          </section>
+        </div>
+      </template>
+    </app-banner>
   </div>
 </template>
 
 <script>
+import AppBanner from './AppBanner.vue'
+
 export default {
   name: 'StockTable',
   props: ['initialData', 'upbjjList', 'kategoriList'],
+  components: {
+    AppBanner,
+  },
   emits: ['edit-buku', 'tambah-buku'],
 
   data() {
@@ -270,8 +275,8 @@ export default {
   background-color: #f9f9f9;
   padding: 8px 10px;
   border-radius: 4px;
-  border-left: 3px solid #ffc425; /* Aksen kuning UT */
-  word-break: break-word; /* Mencegah teks panjang merusak layout */
+  border-left: 3px solid #ffc425;
+  word-break: break-word;
 }
 
 .status-kosong {
@@ -309,8 +314,8 @@ export default {
 
 .filter-controls > div {
   display: flex;
-  flex-direction: column; /* Tumpuk label di atas input */
-  justify-content: flex-end; /* Ratakan ke bawah (penting untuk tombol) */
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .filter-controls label {
@@ -327,14 +332,12 @@ export default {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 0.95rem;
-  box-sizing: border-box; /* Agar padding tidak merusak lebar */
+  box-sizing: border-box;
 }
 
-/* 5. Penanganan khusus untuk blok checkbox
-*/
 .filter-controls > div.checkbox-group {
-  justify-content: flex-start; /* Jangan ratakan ke bawah */
-  padding-top: 1rem; /* Posisikan agar sejajar dengan input lain */
+  justify-content: flex-start;
+  padding-top: 1rem;
 }
 
 .filter-controls .checkbox-group label {
@@ -346,7 +349,6 @@ export default {
 
 .filter-controls .checkbox-group input {
   margin-right: 0.5rem;
-  /* Hapus style lebar penuh dari checkbox */
   width: auto;
   padding: 0;
 }

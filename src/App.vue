@@ -13,18 +13,16 @@
 
     <main>
       <section v-show="currentTab === 'home'">
-        <div class="banner">
-          <div class="banner-content">
-            <h1 v-if="isLoggedIn">{{ greetingText }}, {{ user.nama }}!</h1>
-            <h1 v-else>{{ greetingText }}, Selamat Datang di SITTA!</h1>
-            <h3 class="subtitle">
-              Sistem Informasi Pemesanan dan Distribusi Bahan Ajar Universitas Terbuka
-            </h3>
-          </div>
-          <div class="gambar-welcome">
+        <app-banner
+          :title="
+            isLoggedIn ? `${greetingText}, ${user.nama}!` : `${greetingText}, Selamat Datang!`
+          "
+          subtitle="Sistem Informasi Pemesanan dan Distribusi Bahan Ajar Universitas Terbuka"
+        >
+          <template #side>
             <img src="/assets/img/welcome-img.webp" class="gambar" alt="welcome" />
-          </div>
-        </div>
+          </template>
+        </app-banner>
       </section>
 
       <section v-show="currentTab === 'stok'">
@@ -51,12 +49,8 @@
       </section>
 
       <section v-show="currentTab === 'order'">
-        <div class="banner">
-          <div class="banner-content">
-            <h1>Halaman Pemesanan</h1>
-            <h2>Fitur ini dalam masa pengembangan</h2>
-          </div>
-        </div>
+        <app-banner title="Halaman Pemesanan" subtitle="Fitur ini dalam masa pengembangan">
+        </app-banner>
       </section>
     </main>
 
@@ -89,6 +83,7 @@
 </template>
 
 <script>
+import AppBanner from './components/AppBanner.vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import StockTable from './components/StockTable.vue'
@@ -100,6 +95,7 @@ import apiService from './services/api'
 
 export default {
   components: {
+    AppBanner,
     AppHeader,
     AppFooter,
     StockTable,
